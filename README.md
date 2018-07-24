@@ -13,3 +13,10 @@ A simple implementation of blockchain in node.js to understand the underlying co
 4. Miners add the new block to the blochChain by investing computational power, time and as well as proof of work.
 
 Note: Peers accept the longest chain as valid blockchain and the longest chain refers to the chain with the maximum combined difficulty not woth highest number of blocks.
+
+# Build and run the code 
+
+Install npm (node package manager).
+Install node in whatever environment you want from here https://nodejs.org/en/download/
+For hashing install javascript crypto library by running npm install --save crypto-js
+
