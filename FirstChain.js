@@ -1,49 +1,74 @@
-const SHA256 = require('crypto-js/sha256');         // SHA256 encryption algorithm
-class Block {                                       // Representing block of chain
-    constructor(index,data,timestamp,prevHash='')   // Assigning values to block
+ // SHA256 encryption algorithm
+const SHA256 = require('crypto-js/sha256');        \
+// Representing block of chain
+class Block {           
+    // Assigning values to block                            
+    constructor(index,data,timestamp,prevHash='',nonce)   
     {
         this.index = index;
         this.data = data;
         this.timestamp = timestamp
         this.prevHash = prevHash;
         this.currentHash = this.calclulateHash(); // function to calculate hash of any block
+        // A random number inserted in block to make the creation of block difficult 
+        this.nonce = 0;
     }
-
+    // calculating hash through SHA 256 algorithm
     calclulateHash() {
-        return SHA256(this.index+this.prevHash+this.timestamp+JSON.stringify(this.data)).toString();
+        return SHA256(this.index+this.prevHash+this.timestamp+this.nonce+JSON.stringify(this.data)).toString();
+    }
+    //Function working as proof of work for our blockchain
+    mineBlock(difficulty) {
+        while(this.currentHash.substring(0,difficulty) !== Array(difficulty+1).join("0"))
+        {
+            this.nonce++;
+            this.currentHash=this.calclulateHash();
+        }
+        console.log("Mined");
     }
 }
 
-class blockChain {                  // Representing block chain
+// Representing block chain
+class blockChain {                  
     constructor() {
-    this.chain = [(this.createGenesis())];      // Array with first default block as genesis block
+    // Array with first default block as genesis block
+    this.chain = [(this.createGenesis())];      
+    // Difficulty as per the users
+    this.difficulty = 2;
     }
 
-    createGenesis() {                           //creating genesis block or first block
+    //creating genesis block or first block
+    createGenesis() {                   
         return new Block(0,"genesis_Block","24/07/2018","0");
     }
 
-    getLatestBlock() {              //returning latest block
+    //returning last block
+    getLatestBlock() {              
         return this.chain[this.chain.length-1];
     }
 
-    addNewBlock(newBlock) {             //add new block to the block chain
+     //add new block to the block chain
+    addNewBlock(newBlock) {            
         newBlock.prevHash = this.getLatestBlock().currentHash;
-        newBlock.currentHash = newBlock.calclulateHash(newBlock); 
+        newBlock.mineBlock(this.difficulty); 
         this.chain.push(newBlock); 
     }
 
-    getChain() {            // get all the nodes of our block chain
+    // get all the nodes of our block chain
+    getChain() {            
         console.log(this.chain);
     }
     
-    isValidchain() {            // testing validity of our block chain
+    // testing validity of our block chain
+    isValidchain() {            
         for(let i=1;i<this.chain.length;i++) {
             const currentBlock = this.chain[i];
             const prevBlock = this.chain[i-1];
-            if(currentBlock.currentHash!= currentBlock.calclulateHash()) //checking for any discrepancy  
+            //checking for any discrepancy
+            if(currentBlock.currentHash!= currentBlock.calclulateHash())   
                 return false;
-            if(currentBlock.prevHash != prevBlock.currentHash)   // testing integrity of chain
+            // testing integrity of chain
+            if(currentBlock.prevHash != prevBlock.currentHash)   
                   return false;
             }
             return true;
