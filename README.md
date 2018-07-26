@@ -22,6 +22,11 @@ A simple implementation of blockchain in node.js to understand the underlying co
 
 Note: Peers accept the longest chain as valid blockchain and the longest chain refers to the chain with the maximum combined difficulty not woth highest number of blocks.
 
+For further readings visit :
+
+https://medium.com/coinmonks/blockchain-for-beginners-what-is-blockchain-519db8c6677a
+
+https://medium.com/loom-network/understanding-blockchain-fundamentals-part-1-byzantine-fault-tolerance-245f46fe8419
 # Build and run the code 
 
 Install npm (node package manager).
